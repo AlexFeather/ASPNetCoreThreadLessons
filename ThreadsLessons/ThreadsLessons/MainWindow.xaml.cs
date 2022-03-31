@@ -26,6 +26,8 @@ namespace ThreadsLessons
 
         private object cdLock = new object();
 
+        private MultithreadList<string> list;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -37,6 +39,15 @@ namespace ThreadsLessons
             Thread cd = new Thread(ItsTheFinalCountown);
             cd.IsBackground = true;
             cd.Start();
+
+            list = new MultithreadList<string>();
+
+            for(int i = 0; i < 10; i++)
+            {
+                Thread mtlt = new Thread(MultithreadListTester);
+                mtlt.IsBackground = true;
+                mtlt.Start();
+            }
 
         }
 
@@ -78,6 +89,18 @@ namespace ThreadsLessons
                 Thread.Sleep(250);
             }
 
+        }
+
+        private void MultithreadListTester()
+        {
+            string item = "adfgh";
+            while(true)
+            {
+                list.MultithreadAdd(item);
+                Thread.Sleep(1000);
+                list.MiltithreadRemove(item);
+                Thread.Sleep(1000);
+            }
         }
     }
 }
